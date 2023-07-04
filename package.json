@@ -5,6 +5,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "lint": "eslint 'src/**/*.{j,t}s?(x)'",
+    "lint-fix": "eslint 'src/**/*.{j,t}s?(x)' --fix",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -23,6 +25,11 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.61.0",
+    "@typescript-eslint/parser": "^5.61.0",
+    "@wffranco/eslint-config": "^1.0.1",
+    "eslint": "^8.44.0",
+    "eslint-plugin-react": "^7.32.2"
   },
   "eslintConfig": {
     "extends": [
