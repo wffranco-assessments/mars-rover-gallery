@@ -2,9 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 
+import { isDarkMode } from './hooks/dark-mode';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import router from './routes';
+
+if (isDarkMode()) {
+  document.documentElement.classList.add('dark');
+}
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
