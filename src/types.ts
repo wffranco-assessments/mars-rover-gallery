@@ -58,6 +58,19 @@ export interface Rover {
   status: RoverStatus;
 }
 
+export interface RoverHookResponse<CN = CameraName> {
+  camera?: CN;
+  cameras: readonly CN[];
+  page: number;
+  sol?: number;
+  photos?: Photo[];
+  setCamera: (_camera: CN) => void;
+  setPage: (_page: number) => void;
+  setSol: (_sol: number) => void;
+  search: (_params: Partial<RoverHookResponse<CN>>) => void;
+}
+
+
 export type RoverName = keyof typeof rovers;
 
 export type RoverStatus = typeof status[number];
