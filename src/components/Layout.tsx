@@ -3,7 +3,8 @@ import { NavLink } from 'react-router-dom';
 
 import Avatar from './Avatar';
 import DarkMode from './DarkMode';
-import Logo from './Logo';
+import LogoGitHub from './LogoGitHub';
+import LogoNasa from './LogoNasa';
 
 interface Props extends React.PropsWithChildren {
   className?: string;
@@ -15,7 +16,7 @@ const Layout: React.FC<Props> = ({children, className}) => (
       <nav className="flex sm:flex-col items-center md:items-start gap-4 md:min-w-[8em]">
         <h1>
           <NavLink to={'/'} className="flex gap-2 items-center" title="Home">
-            <Logo className="w-8 md:w-6" />
+            <LogoNasa className="w-8 md:w-6" />
             <span className="hidden md:inline">Home</span>
           </NavLink>
         </h1>
@@ -39,6 +40,10 @@ const Layout: React.FC<Props> = ({children, className}) => (
             </NavLink>
           </li>
         </ul>
+        <a href="https://github.com/wffranco-assessments/mars-rover-gallery" target="_blank" className="flex gap-2 items-center" rel="noreferrer">
+          <LogoGitHub className="w-8 md:w-6" />
+          <span className="hidden md:inline">Source Code</span>
+        </a>
         <DarkMode />
       </nav>
     </aside>
