@@ -1,17 +1,41 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply overflow-y-scroll;
+  }
+}
+
+@layer components {
+  select.form-field {
+    @apply p-2 text-gray-500 dark:text-gray-500 bg-white dark:bg-black border border-gray-300 dark:border-gray-500 rounded-md;
+  }
+
+  .bars-loader {
+    @apply relative aspect-square flex items-center justify-between;
+  }
+  .bars-loader div {
+    @apply inline-block w-1/4 bg-black dark:bg-white;
+    animation: bars-loader 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+  }
+  .bars-loader div:nth-child(1) {
+    animation-delay: -0.24s;
+  }
+  .bars-loader div:nth-child(2) {
+    animation-delay: -0.12s;
+  }
+  .bars-loader div:nth-child(3) {
+    animation-delay: 0;
+  }
+  @keyframes bars-loader {
+    0% {
+      @apply h-full;
+    }
+    50%, 100% {
+      @apply h-3/5;
+    }
+  }
+}
