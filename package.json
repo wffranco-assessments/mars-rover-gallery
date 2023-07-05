@@ -1,6 +1,7 @@
 {
   "name": "mars-rover-nasa",
   "version": "0.1.0",
+  "homepage": "https://wffranco-assessments.github.io/mars-rover-gallery",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
@@ -8,7 +9,9 @@
     "lint": "eslint 'src/**/*.{j,t}s?(x)'",
     "lint-fix": "eslint 'src/**/*.{j,t}s?(x)' --fix",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
@@ -33,7 +36,8 @@
     "@typescript-eslint/parser": "^5.61.0",
     "@wffranco/eslint-config": "^1.0.1",
     "eslint": "^8.44.0",
-    "eslint-plugin-react": "^7.32.2"
+    "eslint-plugin-react": "^7.32.2",
+    "gh-pages": "^5.0.0"
   },
   "eslintConfig": {
     "extends": [
