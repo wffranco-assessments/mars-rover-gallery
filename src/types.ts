@@ -7,6 +7,8 @@ export interface Camera<CN = CameraName> {
   full_name: string;
 }
 
+export type Date = `${bigint}-${0|''}${bigint}-${0|''}${bigint}`;
+
 export type CameraName = Cameras[keyof Cameras];
 
 export interface Cameras {
@@ -20,7 +22,7 @@ export interface Photo<CN = CameraName> {
   sol: number;
   camera: Camera<CN>;
   img_src: string;
-  earth_date: string;
+  earth_date: Date;
   rover: Rover;
 }
 
@@ -30,18 +32,18 @@ export interface PhotosResponse<CN = CameraName> {
 
 export interface Manifest<CN = CameraName> {
   name: RoverName;
-  landing_date: string;
-  launch_date: string;
+  landing_date: Date;
+  launch_date: Date;
   status: RoverStatus;
   max_sol: number;
-  max_date: string;
+  max_date: Date;
   total_photos: number;
   photos: ManifestPhoto<CN>[];
 }
 
 export interface ManifestPhoto<CN = CameraName> {
   sol: number;
-  earth_date: string;
+  earth_date: Date;
   total_photos: number;
   cameras: CN[];
 }
@@ -53,8 +55,8 @@ export interface ManifestResponse<CN = CameraName> {
 export interface Rover {
   id: number;
   name: RoverName;
-  landing_date: string;
-  launch_date: string;
+  landing_date: Date;
+  launch_date: Date;
   status: RoverStatus;
 }
 
@@ -69,7 +71,6 @@ export interface RoverHookResponse<CN = CameraName> {
   setSol: (_sol: number) => void;
   search: (_params: Partial<RoverHookResponse<CN>>) => void;
 }
-
 
 export type RoverName = keyof typeof rovers;
 
