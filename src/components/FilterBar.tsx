@@ -1,21 +1,49 @@
 import React from 'react';
 
-import { CameraName } from '../types';
+import { CameraName, ManifestData, ManifestInfo } from '../types';
+import Select from './Select';
 
-interface Props<C> {
+interface Props<C extends CameraName> {
   camera?: C;
   cameras: readonly C[];
   className?: string;
-  setCamera: (_camera: C) => void;
+  infoKey?: ManifestInfo;
+  manifest?: ManifestData<C>;
+  setCamera: (camera?: C) => void;
+  setInfoKey: (infoKey: ManifestInfo | undefined) => void;
 }
 
-export default function FilterBar<C extends CameraName>({camera, cameras, className, setCamera}: Props<C>) {
+export default function FilterBar<C extends CameraName>({camera, cameras, className, infoKey, manifest, setCamera, setInfoKey}: Props<C>) {
   return (
     <div className={`filter-bar flex gap-4 ${className||''}`.trim()}>
-      <select className="form-field" onChange={e => setCamera((e.target.value as C) || undefined)} value={camera}>
-        <option value={undefined}>All Cammeras</option>
-        {cameras.map(camera => <option value={camera} key={camera}>{camera}</option>)}
-      </select>
+      <Select
+        cleanable
+        formatKey={option => option.value || 'All'}
+        onChange={setCamera}
+        options={cameras.map(name => ({value: name, label: name}))}
+        placeholder="All Cameras"
+        value={camera}
+      />
+      {manifest && (
+        <>
+          <Select
+            cleanable
+            formatKey={option => String(option.value.sol)}
+            onChange={setInfoKey}
+            options={manifest[camera || 'All']?.map((info) => ({value: info, label: info.sol}))}
+            placeholder="Sol"
+            value={infoKey}
+          />
+          <Select
+            cleanable
+            formatKey={option => String(option.value.sol)}
+            onChange={setInfoKey}
+            options={manifest[camera || 'All']?.map((info) => ({value: info, label: info.earth_date}))}
+            placeholder="Earth Date"
+            value={infoKey}
+          />
+        </>
+      )}
     </div>
   );
 }
