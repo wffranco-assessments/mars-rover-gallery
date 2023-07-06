@@ -2,17 +2,21 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { rovers } from '../consts';
-import { getSpiritList } from '../services/spirit';
-import { Cameras, Photo, RoverHookResponse } from '../types';
+import { getSpiritList, getSpiritManifest } from '../services/spirit';
+import { Cameras, ManifestData, ManifestInfo, Photo, RoverHookResponse } from '../types';
+import { getManifestData } from '../services';
 
 type Camera = Cameras['Spirit'];
 type Response = RoverHookResponse<Camera>;
 
 const cameras = rovers.Spirit.Cameras;
+let manifest_cache: ManifestData;
 
 export function useSpiritRover(): Response {
   const params = useParams();
   const [camera, setCamera] = useState<Camera|undefined>();
+  const [infoKey, setInfoKey] = useState<ManifestInfo|undefined>();
+  const [manifest, setManifest] = useState<ManifestData|undefined>();
   const [photos, setPhotos] = useState<Photo[]|undefined>(undefined);
   const [page, setPage] = useState(parseInt(params.page || '') || 1);
   const [sol, setSol] = useState(1000);
@@ -23,6 +27,22 @@ export function useSpiritRover(): Response {
   useEffect(() => {
     search({camera, page, sol});
   }, [camera, page, sol]);
+  useEffect(() => {
+    getManifest();
+  }, []);
+  useEffect(() => {
+    setSol(infoKey?.sol || 0);
+    setPage(1);
+  }, [infoKey]);
+
+  async function getManifest() {
+    setManifest(undefined);
+    if (!manifest_cache) {
+      const manifest = await getSpiritManifest();
+      manifest_cache = await getManifestData(manifest);
+    }
+    setManifest(manifest_cache);
+  }
 
   async function search({camera, page = 1, sol = 1000}: Partial<Response> = {}) {
     setPhotos(undefined);
@@ -34,5 +54,5 @@ export function useSpiritRover(): Response {
     }
   }
 
-  return {camera, cameras, photos, page, search, setCamera, setPage, setSol, sol};
+  return {camera, cameras, infoKey, manifest, photos, page, search, setCamera, setInfoKey, setManifest, setPage, setSol, sol};
 }
