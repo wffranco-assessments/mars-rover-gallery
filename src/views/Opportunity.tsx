@@ -8,12 +8,12 @@ import { useOpportunityRover } from '../hooks/opportunity';
 import { paths } from '../routes';
 
 export default function Oportunity() {
-  const {camera, cameras, setCamera, photos, page} = useOpportunityRover();
+  const {camera, cameras, infoKey, manifest, photos, page, setCamera, setInfoKey} = useOpportunityRover();
 
   return (
     <Layout className="flex flex-col items-center gap-8">
-      <h1 className="text-xl">Curiosity Rover</h1>
-      <FilterBar {...{camera, cameras, setCamera}} />
+      <h1 className="text-xl">Opportunity Rover</h1>
+      <FilterBar camera={camera} cameras={cameras} infoKey={infoKey} manifest={manifest} setCamera={setCamera} setInfoKey={setInfoKey} />
       <GalleryWrapper {...{page, photos}} path={paths.opportunity} />
     </Layout>
   );
