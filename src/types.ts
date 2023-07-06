@@ -7,8 +7,6 @@ export interface Camera<CN = CameraName> {
   full_name: string;
 }
 
-export type Date = `${bigint}-${0|''}${bigint}-${0|''}${bigint}`;
-
 export type CameraName = Cameras[keyof Cameras];
 
 export interface Cameras {
@@ -17,12 +15,19 @@ export interface Cameras {
   Spirit: typeof rovers.Spirit.Cameras[number];
 }
 
+/** Dinamic Key Object (use a list of string keys allowed) */
+export type DKeyObj<T, K extends string | number = string> = {
+  [P in K]: T;
+};
+
+export type Fn<A, B = A> = (param?: A | undefined) => A extends undefined ? B | undefined : B;
+
 export interface Photo<CN = CameraName> {
   id: number;
   sol: number;
   camera: Camera<CN>;
   img_src: string;
-  earth_date: Date;
+  earth_date: StrDate;
   rover: Rover;
 }
 
@@ -32,18 +37,28 @@ export interface PhotosResponse<CN = CameraName> {
 
 export interface Manifest<CN = CameraName> {
   name: RoverName;
-  landing_date: Date;
-  launch_date: Date;
+  landing_date: StrDate;
+  launch_date: StrDate;
   status: RoverStatus;
   max_sol: number;
-  max_date: Date;
+  max_date: StrDate;
   total_photos: number;
   photos: ManifestPhoto<CN>[];
 }
 
+export type ManifestData<C extends CameraName = CameraName> = {
+  [key in C|'All']?: ManifestInfo[];
+}
+
+export interface ManifestInfo {
+  sol: number;
+  earth_date: StrDate;
+  total_photos: number;
+}
+
 export interface ManifestPhoto<CN = CameraName> {
   sol: number;
-  earth_date: Date;
+  earth_date: StrDate;
   total_photos: number;
   cameras: CN[];
 }
@@ -52,24 +67,30 @@ export interface ManifestResponse<CN = CameraName> {
   photo_manifest: Manifest<CN>;
 }
 
+export type StrDate = `${bigint}-${0|''}${bigint}-${0|''}${bigint}`;
+
 export interface Rover {
   id: number;
   name: RoverName;
-  landing_date: Date;
-  launch_date: Date;
+  landing_date: StrDate;
+  launch_date: StrDate;
   status: RoverStatus;
 }
 
 export interface RoverHookResponse<CN = CameraName> {
   camera?: CN;
   cameras: readonly CN[];
+  infoKey?: ManifestInfo;
+  manifest?: ManifestData;
   page: number;
   sol?: number;
   photos?: Photo[];
-  setCamera: (_camera: CN) => void;
-  setPage: (_page: number) => void;
-  setSol: (_sol: number) => void;
-  search: (_params: Partial<RoverHookResponse<CN>>) => void;
+  setCamera: (camera?: CN) => void;
+  setInfoKey: (infoKey?: ManifestInfo) => void;
+  setManifest: (manifest?: ManifestData) => void;
+  setPage: (page: number) => void;
+  setSol: (sol: number) => void;
+  search: (params: Partial<RoverHookResponse<CN>>) => void;
 }
 
 export type RoverName = keyof typeof rovers;
