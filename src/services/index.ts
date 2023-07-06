@@ -1,12 +1,13 @@
-import { Mocks, mocks } from './mocks';
+import { Manifest, ManifestData } from '../types';
 
-const MOCKS_ENABLED = true;
-
-export function mocksEnabled() {
-  return MOCKS_ENABLED && process.env.NODE_ENV !== 'production';
-}
-
-export async function getMock<K extends keyof Mocks>(key: K): Promise<Mocks[K]> {
-  await sleep();
-  return mocks[key];
+export function getManifestData({photos}: Manifest) {
+  return photos.reduce((data: ManifestData, {earth_date, sol, total_photos, cameras}) => {
+    const info = {earth_date, sol, total_photos};
+    data.All?.push(info);
+    cameras.forEach(camera => {
+      data[camera] ||= [];
+      data[camera]?.push(info);
+    });
+    return data;
+  }, {All: []});
 }

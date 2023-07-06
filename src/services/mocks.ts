@@ -1,13 +1,28 @@
-import { Cameras, Manifest, Photo } from '../types';
+import { Cameras, Manifest, Photo, RoverName } from '../types';
+import sleep from '../utils/sleep';
+
+const MOCKS_ENABLED = true;
+
+export function mocksEnabled() {
+  return MOCKS_ENABLED && process.env.NODE_ENV !== 'production';
+}
+
+export async function getMock<K extends keyof Mocks>(key: K): Promise<Mocks[K]> {
+  await sleep();
+  return mocks[key];
+}
 
 export interface Mocks {
-  CuriosityManifest: Manifest<Cameras['Curiosity']>;
-  CuriosityPhotos: Photo<Cameras['Curiosity']>[];
-  OpportunityManifest: Manifest<Cameras['Opportunity']>;
-  OpportunityPhotos: Photo<Cameras['Opportunity']>[];
-  SpiritManifest: Manifest<Cameras['Spirit']>;
-  SpiritPhotos: Photo<Cameras['Spirit']>[];
+  readonly CuriosityManifest: Manifest<Cameras['Curiosity']>;
+  readonly CuriosityPhotos: Photo<Cameras['Curiosity']>[];
+  readonly OpportunityManifest: Manifest<Cameras['Opportunity']>;
+  readonly OpportunityPhotos: Photo<Cameras['Opportunity']>[];
+  readonly SpiritManifest: Manifest<Cameras['Spirit']>;
+  readonly SpiritPhotos: Photo<Cameras['Spirit']>[];
 }
+
+export type ManifestMock<N extends RoverName> = `${N}Manifest`;
+export type PhotoMock<N extends RoverName> = `${N}Photos`;
 
 export const mocks: Mocks = {
   CuriosityManifest: {
@@ -915,4 +930,3 @@ export const mocks: Mocks = {
     },
   ],
 };
-
