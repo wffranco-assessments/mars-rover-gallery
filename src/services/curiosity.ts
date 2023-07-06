@@ -1,17 +1,25 @@
-import { getMock, mocksEnabled } from '.';
 import { APINasaParams, formatParams, nasa } from '../api';
+import { ManifestMock, PhotoMock, getMock, mocksEnabled } from './mocks';
 import { Cameras, Manifest, ManifestResponse, Photo, PhotosResponse } from '../types';
+import { cached } from '../utils/cache';
 
-type Camera = Cameras['Curiosity'];
+type Camera = Cameras[Name];
+type Name = 'Curiosity';
 
-export async function getCuriosityList({camera, page = 1, sol = 1000}: APINasaParams<Camera> = {}): Promise<Photo<Camera>[]> {
-  if (mocksEnabled()) return getMock('CuriosityPhotos');
-  const {data} = await nasa.get<PhotosResponse<Camera>>(`rovers/curiosity/photos/?${formatParams({camera, page, sol})}`);
-  return data.photos;
+export async function getCuriosityList({camera, page = 1, sol = 1000}: APINasaParams<Camera> = {}) {
+  const url = `rovers/curiosity/photos/?${formatParams({camera, page, sol})}`;
+  return cached(url, async(): Promise<Photo<Camera>[]> => {
+    if (mocksEnabled()) return getMock<PhotoMock<Name>>('CuriosityPhotos');
+    const {data} = await nasa.get<PhotosResponse<Camera>>(url);
+    return data.photos;
+  });
 }
 
-export async function getCuriosityManifest(): Promise<Manifest<Camera>> {
-  if (mocksEnabled()) return getMock('CuriosityManifest');
-  const {data} = await nasa.get<ManifestResponse<Camera>>('manifests/curiosity');
-  return data.photo_manifest;
+export async function getCuriosityManifest() {
+  const url = 'manifests/curiosity';
+  return cached(url, async(): Promise<Manifest<Camera>> => {
+    if (mocksEnabled()) return getMock<ManifestMock<Name>>('CuriosityManifest');
+    const {data} = await nasa.get<ManifestResponse<Camera>>(url);
+    return data.photo_manifest;
+  });
 }
