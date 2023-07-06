@@ -10,7 +10,3 @@ export async function getMock<K extends keyof Mocks>(key: K): Promise<Mocks[K]> 
   await sleep();
   return mocks[key];
 }
-
-function sleep(time = 1000) {
-  return new Promise(resolve => setTimeout(resolve, time));
-}
