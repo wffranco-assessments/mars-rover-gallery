@@ -33,9 +33,22 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['**/*.{j,t}s?(x)'],
+      files: ['**/*.js?(x)'],
       env: {
         mocha: true,
+      },
+      rules: {
+        'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      },
+    },
+    {
+      files: ['**/*.ts?(x)'],
+      env: {
+        mocha: true,
+      },
+      rules: {
+        'no-unused-vars': 'off',
+        '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       },
     },
     {
